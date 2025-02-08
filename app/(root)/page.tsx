@@ -1,4 +1,4 @@
-const HomePage = () => {
+const HomePage = async () => {
   return <>Prostore</>;
 };
 
