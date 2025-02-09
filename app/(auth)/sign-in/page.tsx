@@ -13,14 +13,18 @@ import CredentialsSignInForm from "./credentilas-signin-form";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-export const metaData: Metadata = {
-  title: "Sign IN",
+export const metadata: Metadata = {
+  title: "Sign In",
 };
 
-const SighInPage = async () => {
+const SighInPage = async (props: {
+  searchParams: Promise<{ callbackUrl: string }>;
+}) => {
+  const { callbackUrl } = await props.searchParams;
   const seesion = await auth();
+
   if (seesion) {
-    return redirect("/");
+    return redirect(callbackUrl || "/");
   }
   return (
     <div className="w-full max-w-md mx-auto">
