@@ -8,7 +8,7 @@ const LoadingPage = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        width: "100vw",
+        // width: "100vw",
       }}
     >
       <Image src={loader} height={150} width={150} alt="Loaing..." />
