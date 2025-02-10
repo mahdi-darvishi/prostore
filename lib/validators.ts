@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
 
-const currenzy = z
+const currency = z
   .string()
   .refine(
     (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
@@ -20,7 +20,7 @@ export const insertProductSchema = z.object({
   images: z.array(z.string()).min(1, "Product must have at least one image"),
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
-  price: currenzy,
+  price: currency,
 });
 
 // Schema for sighin users in
@@ -44,3 +44,24 @@ export const signUpFormSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
+
+// Cart Schema
+
+export const cartItemSchema = z.object({
+  productId: z.string().min(1, "Product is Required"),
+  name: z.string().min(1, "Name is Required"),
+  slug: z.string().min(1, "Slug is Required"),
+  qty: z.number().int().nonnegative("Quantity must be a positive number"),
+  image: z.string().min(1, "Image is Required"),
+  price: currency,
+});
+
+export const insertCartSchema = z.object({
+  items: z.array(cartItemSchema),
+  itemsPrice: currency,
+  totalPeice: currency,
+  shippingPrice: currency,
+  taxPrice: currency,
+  sessionCartId: z.string().min(1, "Session cart id is required"),
+  userId: z.string().optional().nullable(),
+});
