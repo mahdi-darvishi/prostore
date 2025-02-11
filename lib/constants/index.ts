@@ -12,11 +12,11 @@ export const LATEST_PRODUCTS_LIMIT = Number(
 );
 
 export const signInDefaultValues = {
-  email: "",
-  password: "",
+  email: "admin@example.com",
+  password: "123456",
 };
 export const signUpDefaultValues = {
-  name: " ",
+  name: "",
   email: "",
   password: "",
   confirmPassword: "",
