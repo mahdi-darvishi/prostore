@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/db/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-// import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export const config = {
@@ -88,7 +88,7 @@ export const config = {
             headers: newRequestHeaders,
           },
         });
-        responses.cookies.set("sessionCacrtId", sessionCartId);
+        responses.cookies.set("sessionCartId", sessionCartId);
         return responses;
       } else return true;
     },
