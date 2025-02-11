@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/db/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export const config = {
@@ -34,13 +34,11 @@ export const config = {
             email: credentials.email as string,
           },
         });
-        // Check if user exists and password is correct
         if (user && user.password) {
           const isMatch = compareSync(
             credentials.password as string,
             user.password
           );
-          // If password is correct, return user object
           if (isMatch) {
             return {
               id: user.id,
@@ -50,69 +48,50 @@ export const config = {
             };
           }
         }
-        // If user doesn't exist or password is incorrect, return null
         return null;
       },
     }),
   ],
-  /*************  ✨ Codeium Command 🌟  *************/
   callbacks: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, user, trigger, token }: any) {
-      // Set the user id on the session
       session.user.id = token.sub;
-      // If there is an update, set the name on the session
       if (trigger === "update") {
         session.user.name = user.name;
       }
       return session;
     },
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user, trigger, session }: any) {
-      // Assign user fields to token
       if (user) {
         token.role = user.role;
-
-        // If user has no name, use email as their default name
         if (user.name === "NO_NAME") {
           token.name = user.email!.split("@")[0];
-
-          // Update the user in the database with the new name
           await prisma.user.update({
             where: { id: user.id },
             data: { name: token.name },
           });
         }
       }
-
-      // Handle session updates (e.g., name change)
       if (session?.user.name && trigger === "update") {
         token.name = session.user.name;
       }
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    authorized({ request, auth }: any) {
-      // Check for session ccart cookie
-
+    authorized({ request }: any) {
       if (!request.cookies.get("sessionCartId")) {
-        // Genrate new session cart id cookie
         const sessionCartId = crypto.randomUUID();
-        // Clone the req headers
         const newRequestHeaders = new Headers(request.headers);
-        // Create the new response and add the new headers
         const responses = NextResponse.next({
           request: {
             headers: newRequestHeaders,
           },
         });
-        // set newly generated sessionCartId in the response cookies
-        responses.cookies.set("sessionCartId", sessionCartId);
+        responses.cookies.set("sessionCacrtId", sessionCartId);
         return responses;
       } else return true;
     },
   },
 } satisfies NextAuthConfig;
-
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
