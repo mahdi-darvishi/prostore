@@ -37,7 +37,7 @@ const AddToCart = ({ item }: { item: CartItem }) => {
 
   return (
     <Button className="w-full" type="button" onClick={handleAddToCart}>
-      Add To Cart
+      <Plus /> Add To Cart
     </Button>
   );
 };
