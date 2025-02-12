@@ -4,6 +4,7 @@ import {
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  paymentMethodSchema,
 } from "../validators";
 import { auth, signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
@@ -12,6 +13,7 @@ import { prisma } from "@/db/prisma";
 import { error } from "console";
 import { formatError } from "../utils";
 import { shippingAddress } from "@/types";
+import { Are_You_Serious } from "next/font/google";
 // Sigh in the user with credentials
 
 export async function signInWithCredintials(
@@ -103,6 +105,36 @@ export async function UpdateUserAddress(data: shippingAddress) {
     await prisma.user.update({
       where: { id: currentUser.id },
       data: { address },
+    });
+
+    return {
+      success: true,
+      message: "User updated successfuly",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// Update user's payment method
+export async function updateUserPaymentMethod(
+  data: z.infer<typeof paymentMethodSchema>
+) {
+  try {
+    const session = await auth();
+    const currentUSer = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+    if (!currentUSer) throw new Error("User not found");
+
+    const paymentMethod = paymentMethodSchema.parse(data);
+
+    await prisma.user.update({
+      where: { id: currentUSer.id },
+      data: { paymentMethod: paymentMethod.type },
     });
 
     return {
