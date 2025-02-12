@@ -21,3 +21,11 @@ export const signUpDefaultValues = {
   password: "",
   confirmPassword: "",
 };
+
+export const shippingAddressDefaultValue = {
+  fullName: "Mehdi Darvishi",
+  streetAddress: "123 Milad Street",
+  city: "Ilam",
+  postalCode: "12345",
+  country: "IRI",
+};
