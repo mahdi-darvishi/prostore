@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { shippingAddressDefaultValue } from "@/lib/constants";
 
-const ShippingAddresForm = ({ address }: { address: shippingAddress }) => {
+const ShippingAddressForm = ({ address }: { address: shippingAddress }) => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -188,4 +188,4 @@ const ShippingAddresForm = ({ address }: { address: shippingAddress }) => {
   );
 };
 
-export default ShippingAddresForm;
+export default ShippingAddressForm;
