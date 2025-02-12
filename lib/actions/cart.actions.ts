@@ -63,7 +63,7 @@ export async function addItemToCart(data: CartItem) {
 
       return {
         success: true,
-        message: `#{product.name} added to cart`,
+        message: `${product.name} added to cart`,
       };
     } else {
       // Check if tem is already  in cart
