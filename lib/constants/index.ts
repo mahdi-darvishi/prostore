@@ -23,9 +23,9 @@ export const signUpDefaultValues = {
 };
 
 export const shippingAddressDefaultValue = {
-  fullName: "Mehdi Darvishi",
-  streetAddress: "123 Milad Street",
-  city: "Ilam",
-  postalCode: "12345",
-  country: "IRI",
+  fullName: "",
+  streetAddress: "",
+  city: "",
+  postalCode: "",
+  country: "",
 };
