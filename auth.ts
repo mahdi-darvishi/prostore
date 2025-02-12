@@ -105,7 +105,23 @@ export const config = {
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    authorized({ request }: any) {
+    authorized({ request, auth }: any) {
+      const protectedPaths = [
+        /\/shipping-address/,
+        /\/payment-method/,
+        /\/place-order/,
+        /\/profile/,
+        /\/user\/(.*)/,
+        /\/order\/(.*)/,
+        /\/admin/,
+      ];
+
+      // Het pathname form request url obj
+      const { pathname } = request.nextUrl;
+
+      // Check if  user is not authenticated and accessing a protedted path
+      if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
+
       if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
         const newRequestHeaders = new Headers(request.headers);
