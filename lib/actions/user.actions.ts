@@ -13,7 +13,7 @@ import { prisma } from "@/db/prisma";
 import { error } from "console";
 import { formatError } from "../utils";
 import { shippingAddress } from "@/types";
-import { Are_You_Serious } from "next/font/google";
+import { z } from "zod";
 // Sigh in the user with credentials
 
 export async function signInWithCredintials(
