@@ -11,7 +11,7 @@ import { CartItem } from "@/types";
 
 // Create order and create the order items
 
-export async function cteateOrder() {
+export async function createOrder() {
   try {
     const session = await auth();
     if (!session) throw new Error("User not authenticated");
@@ -44,10 +44,11 @@ export async function cteateOrder() {
       };
     }
 
-    //  Create order object
+    // Prepare the order object
     const order = insertOrderSchema.parse({
       userId: user.id,
       shippingAddress: user.address,
+      paymentMethod: user.paymentMethod,
       itemsPrice: cart.itemsPrice,
       shippingPrice: cart.shippingPrice,
       taxPrice: cart.taxPrice,
