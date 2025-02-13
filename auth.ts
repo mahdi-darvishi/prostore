@@ -1,4 +1,3 @@
-// import { compareSync } from "bcrypt-ts-edge";
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -110,34 +109,35 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     authorized({ request, auth }: any) {
+      // تغییرات: استفاده از مسیرهای ساده‌تری برای بررسی
       const protectedPaths = [
-        /\/shipping-address/,
-        /\/payment-method/,
-        /\/place-order/,
-        /\/profile/,
-        /\/user\/(.*)/,
-        /\/order\/(.*)/,
-        /\/admin/,
+        "/shipping-address",
+        "/payment-method",
+        "/place-order",
+        "/profile",
+        "/admin",
       ];
 
-      // Het pathname form request url obj
+      // Get pathname from request URL object
       const { pathname } = request.nextUrl;
 
-      // Check if  user is not authenticated and accessing a protedted path
-      if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
+      // Check if user is not authenticated and accessing a protected path
+      if (!auth && protectedPaths.includes(pathname)) return false;
 
+      // Check for sessionCartId in cookies and set it if it doesn't exist
       if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
         const newRequestHeaders = new Headers(request.headers);
-        const responses = NextResponse.next({
+        const response = NextResponse.next({
           request: {
             headers: newRequestHeaders,
           },
         });
-        responses.cookies.set("sessionCartId", sessionCartId);
-        return responses;
+        response.cookies.set("sessionCartId", sessionCartId);
+        return response;
       } else return true;
     },
   },
 } satisfies NextAuthConfig;
+
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
