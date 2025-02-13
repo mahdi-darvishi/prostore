@@ -1,4 +1,4 @@
-import { compareSync } from "bcrypt-ts-edge";
+// import { compareSync } from "bcrypt-ts-edge";
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -6,6 +6,7 @@ import { prisma } from "@/db/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { compare } from "./lib/encrypt";
 
 export const config = {
   pages: {
@@ -20,9 +21,7 @@ export const config = {
   providers: [
     CredentialsProvider({
       credentials: {
-        email: {
-          type: "email",
-        },
+        email: { type: "email" },
         password: { type: "password" },
       },
       async authorize(credentials) {
@@ -34,11 +33,15 @@ export const config = {
             email: credentials.email as string,
           },
         });
+
+        // Check if user exists and if the password matches
         if (user && user.password) {
-          const isMatch = compareSync(
+          const isMatch = await compare(
             credentials.password as string,
             user.password
           );
+
+          // If password is correct, return user
           if (isMatch) {
             return {
               id: user.id,
@@ -48,6 +51,7 @@ export const config = {
             };
           }
         }
+        // If user does not exist or password does not match return null
         return null;
       },
     }),
