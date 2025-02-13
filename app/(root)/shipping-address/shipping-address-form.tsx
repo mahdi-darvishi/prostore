@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { shippingAddressDefaultValue } from "@/lib/constants";
 
 const ShippingAddressForm = ({ address }: { address: shippingAddress }) => {
   const router = useRouter();
@@ -29,12 +28,11 @@ const ShippingAddressForm = ({ address }: { address: shippingAddress }) => {
   const form = useForm<z.infer<typeof shippingAddressSchema>>({
     resolver: zodResolver(shippingAddressSchema),
     defaultValues: {
-      fullName: address.fullName || shippingAddressDefaultValue.fullName,
-      streetAddress:
-        address.streetAddress || shippingAddressDefaultValue.streetAddress,
-      city: address.city || shippingAddressDefaultValue.city,
-      country: address.country || shippingAddressDefaultValue.country,
-      postalCode: address.postalCode || shippingAddressDefaultValue.postalCode,
+      fullName: address.fullName || " ",
+      streetAddress: address.streetAddress || " ",
+      city: address.city || " ",
+      country: address.country || " ",
+      postalCode: address.postalCode || " ",
     },
   });
 
