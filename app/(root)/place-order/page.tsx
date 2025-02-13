@@ -78,7 +78,7 @@ const PlaceOrderPage = async () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Item</TableHead>
-                    <TableHead>Quantoty</TableHead>
+                    <TableHead>Quantity</TableHead>
                     <TableHead>Price</TableHead>
                   </TableRow>
                 </TableHeader>
